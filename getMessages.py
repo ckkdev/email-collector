@@ -22,76 +22,98 @@
 # [START gmail_quickstart]
 from __future__ import print_function
 
-# importing os path module
+# importing os & os path module
+import os
 import os.path
 
-  
+#importing base64
+import base64
+
+#simpleGmail
+from simplegmail import Gmail
+from simplegmail.query import construct_query
+gmail = Gmail()
+
+#importing time
+import time
+
+#importing beautiful soup
+from bs4 import BeautifulSoup
+
+# importing email module
+import email
+from email import generator
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 # Parent Directory path
 parent_dir = "C:/Users/14694/Desktop/gm/"
 
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-
-# If modifying these scopes, delete the file token.json.
-SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
-
 
 def main():
-    """Shows basic usage of the Gmail API.
-    Lists the user's Gmail labels.
-    """
-    creds = None
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
 
-    try:
-        # Call the Gmail API
-        service = build('gmail', 'v1', credentials=creds)
-        results = service.users().labels().list(userId='me').execute()
-        labels = results.get('labels', [])
+    gmail = Gmail()
 
-        if not labels:
-            print('No labels found.')
-            return
-        print('Labels:')
-        for label in labels:
-            # Directory
-            directory = label['name']
-            # Path
-            path = os.path.join(parent_dir, directory)
-            try: 
-                os.makedirs(path) 
-                print("Directory '% s' created" % path)
-            except OSError as error: 
-                print(error)
+    labels = gmail.list_labels()
 
-            queryMessages = service.users().messages().list(userId='me', labelIds=[label['name']]).execute()
-            emails = queryMessages.get('messages', [])
-            for email in emails:
-                nEmail = service.users().messages().get(userId='me', id=email['id']).execute()
-                print(nEmail)
+    if not labels:
+        print('No labels found.')
+        return
+    print('Labels:')
+    for label in labels:
+        # Directory
+        directory = label.name
+        # Path
+        path = os.path.join(parent_dir, directory)
+        try: 
+            os.makedirs(path) 
+            print("Directory '% s' created" % path)
+        except OSError as error: 
+            print(error)
 
-    except HttpError as error:
-        # TODO(developer) - Handle errors from gmail API.
-        print(f'An error occurred: {error}')
+        # # For even more control use queries:
+        # # Messages that are: newer than 2 days old, unread, labeled "Finance" or both "Homework" and "CS"
+        query_params = {
+            "labels":[[directory]]
+        }
 
+        messages = gmail.get_messages(query=construct_query(query_params))
+        print(len(messages))
+
+
+        # for message in messages:
+            
+        #     payload = nEmail['payload']
+        #     headers = payload['headers']
+                
+        #     if not payload.get('parts'): continue
+        #     parts = payload.get('parts')[1]['body'] if payload.get('parts')[1]['body'] else payload.get('parts')[0]['body']
+        #     if 'data' in parts.keys():
+        #         data = parts['data']
+        #         data = data.replace("-","+").replace("_","/")
+        #         decoded_data = base64.b64decode(data)
+    
+        #         soup = BeautifulSoup(decoded_data , "lxml")
+        #         body = soup.body()
+        #         msg = MIMEMultipart('alternative')
+        #         msg.set_charset("utf-8")
+
+
+        #         index = 0
+        #         while index < len(headers):
+        #             msg[headers[index]['name']] = headers[index]['value']
+        #             index += 1
+        #             body_content = '';
+        #             for body_part in body:
+        #                 body_content = body_content + str(body_part)
+
+        #         body_content = MIMEText(body_content, 'html')
+        #         msg.attach(body_content)
+        #         outfile_name = os.path.join(parent_dir, directory, nEmail['id']+".eml")
+        #         print("Email " + nEmail['id'] + " added into folder " + label['name'])
+        #         with open(outfile_name, 'w') as outfile:
+        #             gen = generator.Generator(outfile)
+        #             gen.flatten(msg)
 
 if __name__ == '__main__':
     main()
