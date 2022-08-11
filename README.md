@@ -5,6 +5,7 @@ Locally backing up Gmail labels + messages in each
 Python39<br />
 Env Variable set in Path<br />
 pip3 install simplegmail<br />
+pip install beautifulsoup4<br />
 Get .json credentials (name client_secret.json)
 
 # Run
