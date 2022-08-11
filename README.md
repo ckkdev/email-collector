@@ -11,8 +11,8 @@ Get .json credentials (name crednetials.json)
 python getMessages.py
 
 # Idea
-#loop through accounts here and wrap with iteration.<br />
-#creating new folders per each account<br />
-#creating folders for each label<br />
-#listing & getting each email by label<br />
-#generating .eml file per each email grabbed<br />
+loop through accounts here and wrap with iteration.<br />
+creating new folders per each account<br />
+creating folders for each label<br />
+listing & getting each email by label<br />
+generating .eml file per each email grabbed<br />
