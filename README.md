@@ -4,8 +4,8 @@ Locally backing up Gmail labels + messages in each
 # Setup
 Python39<br />
 Env Variable set in Path<br />
-pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib<br />
-Get .json credentials (name crednetials.json)
+pip3 install simplegmail<br />
+Get .json credentials (name client_secret.json)
 
 # Run
 python getMessages.py
