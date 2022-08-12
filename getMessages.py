@@ -78,42 +78,27 @@ def main():
         }
 
         messages = gmail.get_messages(query=construct_query(query_params))
-        print(len(messages))
+        # Print them out!
+        for message in messages:
+
+            msg = MIMEMultipart('alternative')
+            msg.set_charset("utf-8")
+            index = 1
+            headers = message.headers
+            for header in headers:
+                msg[header] = headers[header]
+                index += 1
 
 
-        # for message in messages:
-            
-        #     payload = nEmail['payload']
-        #     headers = payload['headers']
-                
-        #     if not payload.get('parts'): continue
-        #     parts = payload.get('parts')[1]['body'] if payload.get('parts')[1]['body'] else payload.get('parts')[0]['body']
-        #     if 'data' in parts.keys():
-        #         data = parts['data']
-        #         data = data.replace("-","+").replace("_","/")
-        #         decoded_data = base64.b64decode(data)
-    
-        #         soup = BeautifulSoup(decoded_data , "lxml")
-        #         body = soup.body()
-        #         msg = MIMEMultipart('alternative')
-        #         msg.set_charset("utf-8")
+            body_content = MIMEText(message.html, 'html')
+            msg.attach(body_content)
+            outfile_name = os.path.join(parent_dir, directory, message.id+".eml")
+            print("Email " + message.id + " added into folder " + label.name)
+            with open(outfile_name, 'w') as outfile:
+                gen = generator.Generator(outfile)
+                gen.flatten(msg)
 
-
-        #         index = 0
-        #         while index < len(headers):
-        #             msg[headers[index]['name']] = headers[index]['value']
-        #             index += 1
-        #             body_content = '';
-        #             for body_part in body:
-        #                 body_content = body_content + str(body_part)
-
-        #         body_content = MIMEText(body_content, 'html')
-        #         msg.attach(body_content)
-        #         outfile_name = os.path.join(parent_dir, directory, nEmail['id']+".eml")
-        #         print("Email " + nEmail['id'] + " added into folder " + label['name'])
-        #         with open(outfile_name, 'w') as outfile:
-        #             gen = generator.Generator(outfile)
-        #             gen.flatten(msg)
+            time.sleep(1)
 
 if __name__ == '__main__':
     main()
