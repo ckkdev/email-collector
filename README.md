@@ -3,17 +3,15 @@ Locally backing up Gmail labels + messages in each
 
 # Setup
 Python39<br />
-Env Variable set in Path<br />
 pip3 install simplegmail<br />
-pip install beautifulsoup4<br />
-Get .json credentials (name client_secret.json)
+Download .json credentials from Google Console Credentials (rename to client_secret.json)
 
 # Run
 python getMessages.py
 
-# Idea
-loop through accounts here and wrap with iteration.<br />
-creating new folders per each account<br />
-creating folders for each label<br />
-listing & getting each email by label<br />
-generating .eml file per each email grabbed<br />
+# Purpose
+Create folders for each label in a Gmail account.<br />
+Create .eml copies of each message in each newly created folder.
+
+#ToDos
+Find a better way to not cap out on quota limit.
