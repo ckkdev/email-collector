@@ -8,7 +8,3 @@ Download .json credentials from <a href="https://console.cloud.google.com/" targ
 
 # Run
 python get_messages.py
-
-# Purpose
-Create folders for each label in a Gmail account.<br />
-Create .eml copies of each message in each newly created f
