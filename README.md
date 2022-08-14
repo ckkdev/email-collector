@@ -4,7 +4,7 @@ Generates local folders based on "Labels", gets messages via Gmail API & adds th
 
 # Setup
 Python39<br />
-Download .json credentials from Google Console Credentials (rename to client_secret.json)
+Download .json credentials from <a href="https://console.cloud.google.com/" target="_blank">Google Console Credentials</a> (rename to client_secret.json)
 
 # Run
 python get_messages.py
