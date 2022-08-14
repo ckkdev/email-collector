@@ -1,5 +1,6 @@
 # email-collector (Gmail)
-Locally backing up Gmail labels + messages in each
+Locally backing up Gmail messages.<br/>
+Generates local folders based on "Labels", gets messages via Gmail API & adds them to their respective local Label/Folder.
 
 # Setup
 Python39<br />
